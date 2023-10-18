@@ -1,0 +1,215 @@
+.ad-items{
+    padding: 20px 40px;
+}
+#menu{
+    position: sticky;
+    top: 80px;
+}
+.ad-heading{
+    padding: 30px 30px 30px 40px;
+    margin-bottom: 30px;
+    border-bottom: solid 1px #000000;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+.ad-searchbar{
+    margin-bottom: 50px;
+}
+.ad-search-box{
+    border-radius: 20px;
+    height: 45px;
+    padding: 20px;
+    width: 40%;
+    border: 1px solid #222
+}
+.ad-header{
+    justify-content: space-between;
+    display: flex;
+    margin-bottom: 20px;
+}
+.pro-desc{
+    height: 150px !important ;
+}
+#ad-tit{
+    text-transform: uppercase;
+    font-weight: 600;
+    text-align: left;
+    padding-left: 10px;
+}
+.ad-addbtn{
+    max-height: 30px;
+    border-radius: 10px;
+    margin-left: auto;
+    padding: 5px;
+}
+.ad-addbtn:after{
+    border-radius: 10px; 
+}
+.ad-addbtn:hover{
+    
+    border-radius: 10px; 
+}
+.ad-addbtn2{
+    float: right;
+    padding:10px;
+    width: 30%;
+    
+}
+.update-btn{
+    float: right;
+	width: auto;
+  	padding: 10px 30px;
+    font-size: 12px;
+}
+.sign-out-btn{
+    text-align: left;
+    height: 100%;
+    width: 100%;
+    background-color: #FFF;
+    color:#000000;
+    border: none;
+   
+}
+.ad-product, .ad{
+    margin-bottom: 10px;
+    
+	padding: 10px;
+	border-bottom: 1px solid #E2E2E2;
+}
+.ad-proimg{
+    position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+.ad-proinfo, .ad-bannerinfo{
+    display: inline-flex;
+    margin: auto;
+    justify-content: space-between;
+}
+.ad-bannerinfo p{
+    width: 100px;
+
+}
+.ad-proinfo h4{
+    width: 100px;
+    font-weight: 600;
+    padding-right: 5px;
+}
+.ad-proinfo span{
+    width: 100px;
+    padding-right: 5px;
+    font-weight: 600;
+}
+.ad-proinfo del{
+    width: 100px;
+    color:#888;
+}
+.ad-action{
+    text-align: right;
+    margin: auto;
+}
+.ad-action a{
+    margin-right: 5px;
+}
+@media only screen and (max-width: 992px){
+    .ad-proinfo p{
+        display: none;
+    }
+
+}
+.size{
+	display: inline-block;
+	padding: 10px 0px;
+	width: 100%;
+	border-bottom: solid 1px #EEEEEE;
+	
+}.size-icon{
+	position: absolute;
+    clip: rect(0,0,0,0);
+    pointer-events: none;
+    margin-right:8px;
+}
+.size-label{
+    margin: 0;
+    background: #FFFFFF;
+    width: 40px;
+    margin-right: 5px;
+    height: 40px;
+    line-height: 40px;
+    position: relative;
+    border: 1px solid #E5E5E5;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+}
+.size input:checked + label{
+	background-color: #000000;
+	color: #FFFFFF;
+}
+.size:disabled +label{
+	pointer-events: none;
+    filter: none;
+	background-color: #DDDDDD;
+	color: #FFF;
+
+}
+.sale-icon{
+    cursor: pointer;
+}
+.saleform{
+    display: flex;
+    align-items: center;
+    margin: auto;
+    justify-content: center;
+}
+.saleform input{
+    width: 120px;
+}
+.adsalebtn:hover{
+    color: #888;
+}
+.saleform a{
+    text-decoration:underline;
+    font-size: 13px;
+    margin-left: 10px;
+}
+.edit-img-form{
+    display: flex;
+
+}
+.edit-img{
+    height:20%;
+    width: 20%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+
+}
+.edit-inputimg{
+    margin: auto;
+    margin-right: 0;
+    width: 65%;
+    height: 10%;
+    float: right;
+}
+.statistics-tit{
+    text-align: right;
+}
+.statistics{
+    text-align: left;
+}
+.note-form{
+    font-size: 12px;
+    color: red;
+}
+.filter form{
+    display: flex;
+    align-items: center;
+}
+.filterbtn{
+    width: 10%;
+    height: 30px;
+    margin-left: 15px;
+}
