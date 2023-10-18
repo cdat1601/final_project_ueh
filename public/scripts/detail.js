@@ -5,7 +5,3 @@ var SmallImg = document.getElementsByClassName("small-img");
 function set(i) {
     ProductImg.src = SmallImg[i].src;
 }
-
-function thongbao(){
-    alert("Đã thêm sản phẩm vào giỏ hàng!");
-}

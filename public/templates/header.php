@@ -13,13 +13,13 @@
                     <a href="?to=search&from=self&danhmuc%5B%5D=4&danhmuc%5B%5D=3&danhmuc%5B%5D=5">Bottoms</a>
                 </li>
                 <li class="nav-item">
-                    <a href="./?to=search&from=another&name=loai&value=3">Sale</a>
+                    <a href="?to=search&from=another&name=xemthem&value=hotsale">Sale</a>
                 </li>
                 <li class="nav-item">
-                    <a href="./?to=search&from=another&name=loai&value=4">Support</a>
+                    <a href="./?to=support">Support</a>
                 </li>
                 <li class="nav-item">
-                    <a href="./?to=search&from=another&name=loai&value=5">About us</a>
+                    <a href="./?to=about-us">About us</a>
                 </li>
             </ul>
         </nav>

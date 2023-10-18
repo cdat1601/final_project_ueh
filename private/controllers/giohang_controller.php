@@ -5,7 +5,6 @@ class GioHangController
 {
     public function LoadGioHang()
     {
-        // Kiểm tra đã đăng nhập chưa? 
         $login_status = isset($_SESSION["taikhoan"]) ? true : false; 
         if ($login_status) {
 

@@ -52,6 +52,10 @@
 	width: 100%;
   	padding: 10px;
 }
+.order-btn:hover{
+	color: #000;
+	background-color: #FFF;
+}
 .order-btn a{
 	color:#fff;
 }

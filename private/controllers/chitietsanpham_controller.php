@@ -311,9 +311,10 @@ class ChiTietSanPhamController{
                             </div>
                             <br style='clear: both'></br>
                             <div class='d-flex'>
-                                <button type='submit' name='from' value='themvaogio' onclick='thongbao()' class='detail-btn add-btn'>Thêm vào giỏ</button>
+                                <button type='submit' name='from' value='themvaogio' class='detail-btn add-btn'>Thêm vào giỏ</button>
                                 <button type='submit' name='from' value='muangay' class='detail-btn buy-btn'>Mua ngay</button>
                             </div>
+                            
                         </div>
                     </form>
 

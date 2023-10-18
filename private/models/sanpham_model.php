@@ -57,7 +57,7 @@ class SanPhamModel{
 		$link = "";
 		taoKetNoi($link);
 		$result = chayTruyVanTraVeDL($link, "SELECT * FROM tbl_giamgia as gg 
-											LEFT JOIN tbl_sanpham as sp ON gg.id_sanpham = sp.id_sanpham WHERE (((100 - (gg.giagiam/sp.gia)*100)) > 20);");
+											LEFT JOIN tbl_sanpham as sp ON gg.id_sanpham = sp.id_sanpham WHERE (((100 - (gg.giagiam/sp.gia)*100)) > 0);");
 		while ($row = mysqli_fetch_assoc($result)) {
 			array_push($sanphams, $row);
 		}
@@ -255,5 +255,3 @@ class SanPhamModel{
 	}
 
 }
-
-?>

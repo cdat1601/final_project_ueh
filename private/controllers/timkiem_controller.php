@@ -140,15 +140,13 @@ class TimKiemController{
     private function LoadSPGiamGia()
     {
 
-        // Truy vấn danh sách sản phẩm HoteSale
         $sanPhamModel = new SanPhamModel();
         $sanphams = $sanPhamModel->LoadHotSale();
 
-        //Kiểm tra có phân trang chưa
         $page = isset($_GET["page"]) ? $_GET["page"] : 1;
+        
         $this->LoadSanPham($sanphams, $page);
 
-        // Lưu danh sách giày vào session
         $_SESSION['sanphams'] = $sanphams;
     }
     
@@ -158,17 +156,13 @@ class TimKiemController{
         if (isset($_SESSION["sanphams"])) {
 
             $sanphams = $_SESSION["sanphams"];
-
-            // Số lượng sản phẩm hiện có            
+         
             $soluongsanphamhienco = count($sanphams);
 
-            // Số trang hiển thị
             $total = ceil($soluongsanphamhienco / SO_SP_TREN_TRANG);
 
-            // Kiểm tra đến từ trang nào
             if ($_GET["from"] == "self") {
                 
-                // Lấy url hiện tại
                 $danhmuc = isset($_GET["danhmuc"]) ? $_GET["danhmuc"] : -1;
                 $gia = isset($_GET["gia"]) ? $_GET["gia"] : -1;
                 $size = isset($_GET["size"]) ? $_GET["size"] : -1;
@@ -193,27 +187,51 @@ class TimKiemController{
                         $href .= "&size%5B%5D=" . $size[$i] . "";
                     }
                 }
-
-                // Hiển thị thanh phân trang
+                $page = isset($_GET["page"]) ? $_GET["page"] : 1 ;
+                echo'
+                <a href="'.$href.'&page='.$page-1 .'" class="direction">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                </svg>
+                </a>';
                 for ($i = 1; $i <= $total; $i++) {
-
-                    echo
-                    "
-                      <a class='to-num' href='$href&page=$i' >$i</a>
-                    ";
-                }
+                    if ($i == $page) {
+                        
+                        echo
+                        "
+                            <span class='to-num current'>" . $i . "</span>
+                        ";
+                    } else {
+                        echo
+                        "
+                        
+                        <a class='to-num' href='$href&page=$i' >$i</a>
+                      
+                        ";
+                    }
+                } echo'
+                <a href="'.$href.'&page='.$page+1 .'" class="direction">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                    </svg>
+                </a>
+                ';
+                
             }
 
-            // Kiểm tra tham số phân trang
+          
             $page = isset($_GET["page"]) ? $_GET["page"] : 1 ;
             if ($_GET["from"] == "another")
             {
 
-                // Lấy url
                 $name = $_GET["name"];
                 $value = $_GET["value"];
-
-                // Hiển thị thanh phân trang
+                echo'
+                <a href="./?to=search&from=another&name=' . $name . '&value=' . $value . '&page=' . $page-1 . '" class="direction">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                </svg>
+                </a>';
                 for ($i = 1; $i <= $total; $i++) {
 
                     if ($i == $page) {
@@ -228,15 +246,26 @@ class TimKiemController{
                             <a class='to-num' href='./?to=search&from=another&name=" . $name . "&value=" . $value . "&page=" . $i . "'>" . $i . "</a>
                         ";
                     }
-
+                
                     
                 }
+                echo'
+                <a href="./?to=search&from=another&name=' . $name . '&value=' . $value . '&page=' . $page+1 . '" class="direction">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                    </svg>
+                </a>
+                ';
             }
             if ($_GET["from"] == "searchbar") {
-                // Lấy url
                 $key= $_GET["key"];
-
-                // Hiển thị thanh phân trang
+                $page = isset($_GET["page"]) ? $_GET["page"] : 1 ;
+                echo'
+                <a href="./?to=search&from=searchbar&key='.$key.'&page=' . $page-1 . '" class="direction">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                </svg>
+                </a>';
                 for ($i = 1; $i <= $total; $i++) {
 
                     if ($i == $page) {
@@ -252,9 +281,16 @@ class TimKiemController{
                             <a class='to-num' href='./?to=search&from=searchbar&key=".$key."&page=" . $i . "'>" . $i . "</a>
                         ";
                     }
-
+                    
                    
                 }
+                echo'
+                <a href="./?to=search&from=searchbar&key='.$key.'&page=' . $page+1 . '" class="direction">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                    </svg>
+                </a>
+                ';
             }
         }
     }
@@ -264,7 +300,7 @@ class TimKiemController{
         $dem = 1;
         for ($i = $from; $i < count($sanpham) && $dem <= SO_SP_TREN_TRANG; $i++) {
 
-            // Trường hợp giày có thông tin giảm giá
+          
             if (isset($sanpham[$i]["giagiam"])) {
                 $phantramgiam = round(100-($sanpham[$i]['giagiam']/$sanpham[$i]['gia'])*100);
                 echo ("
@@ -295,7 +331,6 @@ class TimKiemController{
                      ");
             }
 
-            // Trường hợp giày không có thông tin giảm giá
             else{               
                 echo ("
                         <div class='col-lg-3 col-md-6 col-6 products'>
