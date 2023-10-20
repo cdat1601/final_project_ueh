@@ -436,16 +436,16 @@ class ChiTietSanPhamController{
     private function LoadSize($idsanpham,$size){
         $sanPhamModel = new SanPhamModel();
         $sanpham = $sanPhamModel->LoadSanPhamInFo($idsanpham);
-
+        $tonkho = $sanPhamModel->LoadTonKho($idsanpham,$size);
         $sizes = array();
         foreach ($sanpham as $key => $value) {
             array_push($sizes, $value["size"]);
         }
         $hienthisize ='';
-        if ($sanpham[0]['id_danhmuc'] ==6 ){
+        if ($sanpham[0]['id_danhmuc'] == 6 ){
             $hienthisize .= "<p></p>";
         } else{
-            if(in_array($size,$sizes)){
+            if(in_array($size,$sizes) && $tonkho > 0){
                 $hienthisize .= "<input type='radio' class='size-selector' name='size' id='$size' value='$size' autocomplete='off' checked=''>
                 <label class='size-btn' for='$size'>$size</label>";
             }else {

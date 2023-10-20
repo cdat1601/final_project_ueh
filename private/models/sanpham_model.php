@@ -20,7 +20,7 @@ class SanPhamModel{
 		taoKetNoi($link);
 		$result = chayTruyVanTraVeDL($link, "SELECT bangphu1.*, dm.tendanhmuc
 											FROM (SELECT sp.*, dm.id_danhmuc 
-											FROM (SELECT sp.*, s.size 
+											FROM (SELECT sp.*, s.size, s.tonkho
 											FROM (SELECT sp.*, gg.giagiam
 											FROM (SELECT * FROM tbl_sanpham AS sp WHERE sp.id_sanpham = $idsanpham) AS sp 
 											LEFT JOIN tbl_giamgia AS gg ON sp.id_sanpham = gg.id_sanpham) AS sp 
@@ -32,6 +32,16 @@ class SanPhamModel{
 			array_push($sanpham, $row);
 		}
 		return $sanpham;
+	}
+
+	public function LoadTonKho($idsanpham, $size){
+		$link = null;
+		taoKetNoi($link);
+		$result = chayTruyVanTraVeDL($link, "SELECT tbl_size.tonkho FROM tbl_size WHERE tbl_size.id_sanpham = $idsanpham and tbl_size.size = '$size';");
+		while ($row = mysqli_fetch_array($result)) {
+			return $row[0];
+		}
+	
 	}
 
 	public function LoadNewArrivals($ngay){
@@ -106,7 +116,13 @@ class SanPhamModel{
 	public function ThemSizeChoSanPham($idsanpham,$size){
 		$link = "";
 		taoKetNoi($link);
-		chayTruyVanKhongTraVeDL($link, "INSERT INTO `tbl_size` VALUES ($idsanpham, '$size');");
+		chayTruyVanKhongTraVeDL($link, "INSERT INTO `tbl_size` VALUES ($idsanpham, '$size',0);");
+	}
+
+	public function ThemTonKho($idsanpham,$size,$tonkho){
+		$link = "";
+		taoKetNoi($link);
+		chayTruyVanKhongTraVeDL($link, "UPDATE tbl_size SET tonkho = $tonkho WHERE id_sanpham = $idsanpham and size = '$size'");
 	}
 
 	public function LoadSanPhamTheoTenHoacLoai($key)

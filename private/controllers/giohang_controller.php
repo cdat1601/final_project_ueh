@@ -13,28 +13,26 @@ class GioHangController
                 $from = isset($_GET["from"]) ? $_GET["from"] : -1;
                 if ($from == "themvaogio") {
                     $this->ThemSanPham();
-                    header("Location: ./?to=detail&id=".$_GET["id_sanpham"]."");
                     exit();
+                    
                 }
                 $this->ThemSanPham();
             }
             if ($action == 'capnhat'){
                 $soluong = $_GET['soluong'];
-                $this->CapNhatGioHang($soluong);
-                header("Location: ./?to=purchase");
+                if($this->CapNhatGioHang($soluong)){
+                    header("Location: ./?to=purchase");
+                }
             }
             if ($action == 'giam'){
                 $this->ThayDoiSoLuong(-1);
-                header("Location: ./?to=cart");
             }
             if ($action == 'tang'){
                 $this->ThayDoiSoLuong(1);
-                header("Location: ./?to=cart");
             }
             if ($action == "xoa") {
                 $this->XoaSanPham();
             }
-
             $this->HienThiSanPhamTrongGio();
 
         }
@@ -48,12 +46,24 @@ class GioHangController
         $gioHangModel = new  GioHangModel();
         $taikhoan = $_SESSION["taikhoan"];
         $idsampham = $_GET["id"];
-        echo $thaydoi[0];
-        echo $thaydoi[1];
         $size = $_GET["size"];
-        for($i = 0; $i < count($size); $i++){
-            $gioHangModel->CapNhatSoLuongCuaSanPham($taikhoan["id_taikhoan"], $idsampham[$i], $size[$i], $thaydoi[$i]);
+        $result = '';
+        for($i = 0; $i < count($size); $i++){ 
+        $sanPhamModel = new SanPhamModel;
+        $tonkho = $sanPhamModel->LoadTonKho($idsampham[$i],$size[$i]);
+            if($tonkho < $thaydoi[$i]){
+                $message = "Số lượng hàng tồn kho không đủ";
+                echo "<script type='text/javascript'>alert('$message');</script>";
+                $result = false;
+                return $result;
+            }else{
+                $gioHangModel->CapNhatSoLuongCuaSanPham($taikhoan["id_taikhoan"], $idsampham[$i], $size[$i], $thaydoi[$i]);
+                $result = true;
+                return $result;
+            }
         }
+        
+
     }
     private function ThayDoiSoLuong($thaydoi){
         $taikhoan = $_SESSION["taikhoan"];
@@ -61,12 +71,22 @@ class GioHangController
         $size = $_GET["size"];
         $gioHangModel = new  GioHangModel();
         $soluong = $gioHangModel->LoadSoLuongCuaSanPham($taikhoan["id_taikhoan"],$idsampham,$size);
-        if($soluong[0] == 1 && $thaydoi == -1){
-            $gioHangModel->XoaHangTrongGio($taikhoan["id_taikhoan"], $idsampham,$size);
-           
+        $sanPhamModel = new SanPhamModel;
+        $tonkho = $sanPhamModel->LoadTonKho($idsampham,$size);
+        if($soluong[0] >= $tonkho && $thaydoi == 1){
+            $message = "Số lượng hàng tồn kho không đủ";
+                echo "<script type='text/javascript'>alert('$message');</script>";
         }else{
-            $gioHangModel->ThemHang($taikhoan["id_taikhoan"], $idsampham, $size, $thaydoi);
+            if($soluong[0] == 1 && $thaydoi == -1){
+                $gioHangModel->XoaHangTrongGio($taikhoan["id_taikhoan"], $idsampham,$size);
+               
+            }else{
+                $gioHangModel->ThemHang($taikhoan["id_taikhoan"], $idsampham, $size, $thaydoi);
+            }
+            
+            header("Location: ./?to=cart");
         }
+        
         
         
     }
@@ -76,8 +96,17 @@ class GioHangController
         $size = $_GET["size"];
         $soluong = $_GET["soluong"];
 
-        $gioHangModel = new  GioHangModel();
-        $gioHangModel->ThemHang($taikhoan["id_taikhoan"], $idsampham, $size, $soluong);
+        $sanPhamModel = new SanPhamModel;
+        $tonkho = $sanPhamModel->LoadTonKho($idsampham,$size);
+        if($soluong > $tonkho){
+        $message = "Số lượng hàng tồn kho không đủ";
+                echo "<script type='text/javascript'>alert('$message');</script>";
+        echo "<a href='?to=detail&id=".$idsampham."'>Quay lại</a>";
+        }else{
+            $gioHangModel = new  GioHangModel();
+            $gioHangModel->ThemHang($taikhoan["id_taikhoan"], $idsampham, $size, $soluong);
+            header("Location: ?to=cart");
+        }
     }
 
     private function XoaSanPham(){

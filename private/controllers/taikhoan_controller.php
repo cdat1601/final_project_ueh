@@ -41,7 +41,11 @@ class TaiKhoanController{
                 exit();
             }
             if ($action == "theodoidonhang") {
-                $this->LoadTheoDoiDonHang($taikhoan);
+                $date = '';
+                if(isset($_GET['ngaylap'])){
+                    $date = $_GET['ngaylap'];
+                }
+                $this->LoadTheoDoiDonHang($taikhoan,$date);
                 exit();
             }
 
@@ -558,10 +562,10 @@ class TaiKhoanController{
         <script src='public/scripts/account.js'></script>
         ";
     }
-    private function LoadTheoDoiDonHang($taikhoan){
+    private function LoadTheoDoiDonHang($taikhoan,$date){
         
         $hoaDonModel = new HoaDonModel;
-        $hoadon = $hoaDonModel->LoadHoaDonCuaTaiKhoan($taikhoan["id_taikhoan"]);
+        $hoadon = $hoaDonModel->LoadHoaDonCuaTaiKhoan($taikhoan["id_taikhoan"],$date);
         echo "
         <style>
         #hai,#mot {
@@ -580,6 +584,19 @@ class TaiKhoanController{
             <div class='heading' style='padding-bottom:0'>
                 <h3 class='text-uppercase'>Theo dõi đơn hàng</h3>
             </div>
+            <div class='filter mb-3'>
+        <form method='get'>
+       
+            <input type='hidden' name='to' value='account'>
+            <input type='hidden' name='action' value='theodoidonhang'>
+            
+            <div class='form-floating ms-1'>
+                <input class='form-control' type='date' name='ngaylap' id='ngaylap' value='".$date."' placeholder='dd-mm-yyyy'>
+                <label style='left:9px;' for='ngaylap'>Ngày đặt hàng</label>
+            </div>
+        <button type='submit' class='filterbtn button'>Lọc</button>
+        </form>
+        </div>
             ";
             for($i = 0; $i < count($hoadon); $i++){
                 echo"

@@ -291,6 +291,7 @@ class QuanLySanPhamController
                     echo "
                     </div>
                     </div>
+                    
                 </div>
 
                 <div class='row'>
@@ -316,6 +317,14 @@ class QuanLySanPhamController
                             <input type='checkbox' class='size-icon' name='size[]' id='pk' value='PK' autocomplete='off' >
                             <label class='size-label' for='pk'>PK</label>
                         </div>
+                </div>
+                <div class='col-12 mb-3'>";
+                $sizename = array('XS','S','M','L','XL','PK');
+                for($i = 0; $i< count($sizename); $i++){
+                    echo "
+                    <input type='number' name='soluong".$sizename[$i]."' value='' class='stock'></input>";
+                }
+                echo"
                 </div>
                 <div class='form-floating mb-3 col-12'>
                     <textarea class='pro-desc form-control' placeholder='Mô tả chi tiết' id='description' name='description'></textarea>
@@ -385,6 +394,16 @@ class QuanLySanPhamController
         
 		$allow = array("jpg", "png", "jpeg");
 
+
+        
+        $tonkhoXS = isset($_POST['soluongXS']) ? $_POST['soluongXS'] : -1 ;
+        $tonkhoS = isset($_POST['soluongS']) ? $_POST['soluongS'] : -1 ;
+        $tonkhoM = isset($_POST['soluongM']) ? $_POST['soluongM'] : -1 ;
+        $tonkhoL = isset($_POST['soluongL']) ? $_POST['soluongL'] : -1 ;
+        $tonkhoXL = isset($_POST['soluongXL']) ? $_POST['soluongXL'] : -1 ;
+        $tonkhoPK = isset($_POST['soluongPK']) ? $_POST['soluongPK'] : -1 ;
+
+
         if(in_array($fileActualExt, $allow)){
 			if($anhchinhError == 0 && $anh1Error == 0 && $anh2Error == 0 && $anh3Error == 0&& $anh4Error == 0 ){
 				if($anhchinhsize<10000000 && $anh1size<10000000 && $anh2size<10000000 && $anh3size<10000000 && $anh4size<10000000 ){
@@ -405,6 +424,12 @@ class QuanLySanPhamController
                                     for($i = 0; $i < count($size); $i++){
                                         $sanPhamModel->ThemSizeChoSanPham($idsanpham,$size[$i]);
                                     }
+                                    if($tonkhoXS != -1){$sanPhamModel->ThemTonKho($idsanpham,'XS',$tonkhoXS);}
+                                    if($tonkhoS != -1){$sanPhamModel->ThemTonKho($idsanpham,'S',$tonkhoS);}
+                                    if($tonkhoM != -1){$sanPhamModel->ThemTonKho($idsanpham,'M',$tonkhoM);}
+                                    if($tonkhoL != -1){$sanPhamModel->ThemTonKho($idsanpham,'L',$tonkhoL);}
+                                    if($tonkhoXL != -1){$sanPhamModel->ThemTonKho($idsanpham,'XL',$tonkhoXL);}
+                                    if($tonkhoPK != -1){$sanPhamModel->ThemTonKho($idsanpham,'PK',$tonkhoPK);}
                                     header("Location: ?to=admin");
 								}
 							}
@@ -460,6 +485,8 @@ class QuanLySanPhamController
         $gioithieu = $_POST['description'];
         $ngaynhap = $_POST['ngaynhap'];
         $size = $_POST['size'];
+        
+        
 
         if(file_exists($_FILES["mainimg"]['tmp_name'])){
             $anhchinh = $_FILES["mainimg"];   
@@ -512,7 +539,13 @@ class QuanLySanPhamController
             $anh4size = 0;
             $up4 = array($product[0]['anhphu4'],true);
         }
-
+        $tonkhoXS = isset($_POST['soluongXS']) ? $_POST['soluongXS'] : -1 ;
+        $tonkhoS = isset($_POST['soluongS']) ? $_POST['soluongS'] : -1 ;
+        $tonkhoM = isset($_POST['soluongM']) ? $_POST['soluongM'] : -1 ;
+        $tonkhoL = isset($_POST['soluongL']) ? $_POST['soluongL'] : -1 ;
+        $tonkhoXL = isset($_POST['soluongXL']) ? $_POST['soluongXL'] : -1 ;
+        $tonkhoPK = isset($_POST['soluongPK']) ? $_POST['soluongPK'] : -1 ;
+        
 			if($anhchinhError == 0 && $anh1Error == 0 && $anh2Error == 0 && $anh3Error == 0  && $anh4Error == 0 ){
 				if($anhchinhsize<1000000 && $anh1size<1000000 && $anh2size<1000000 && $anh3size<1000000 && $anh4size<1000000 ){
 					if($upmain[1] && $up1[1] && $up2[1] && $up3[1] && $up4[1]){
@@ -528,6 +561,12 @@ class QuanLySanPhamController
                                     for($i = 0; $i < count($size); $i++){
                                         $sanPhamModel->ThemSizeChoSanPham($idsanpham,$size[$i]);
                                     }
+                                    if($tonkhoXS != -1){$sanPhamModel->ThemTonKho($idsanpham,'XS',$tonkhoXS);}
+                                    if($tonkhoS != -1){$sanPhamModel->ThemTonKho($idsanpham,'S',$tonkhoS);}
+                                    if($tonkhoM != -1){$sanPhamModel->ThemTonKho($idsanpham,'M',$tonkhoM);}
+                                    if($tonkhoL != -1){$sanPhamModel->ThemTonKho($idsanpham,'L',$tonkhoL);}
+                                    if($tonkhoXL != -1){$sanPhamModel->ThemTonKho($idsanpham,'XL',$tonkhoXL);}
+                                    if($tonkhoPK != -1){$sanPhamModel->ThemTonKho($idsanpham,'PK',$tonkhoPK);}
 								}
 							}
 						}
@@ -621,7 +660,17 @@ class QuanLySanPhamController
                 ".$this->LoadSize($idsanpham,'XL')."
                 ".$this->LoadSize($idsanpham,'PK')."
                 </div>
+                
                 </div> 
+                <div class='col-12 mb-3'>";
+                $sizename = array('XS','S','M','L','XL','PK');
+                for($i = 0; $i< count($sizename); $i++){
+                    $tonkho = $sanPhamModel->LoadTonKho($idsanpham,$sizename[$i]);
+                    echo "
+                    <input type='number' name='soluong".$sizename[$i]."' value='".$tonkho."' class='stock'></input>";
+                }
+                echo"
+                </div>
                 <div class='form-floating mb-3 col-12'>
                     <textarea class='pro-desc form-control' placeholder='Mô tả chi tiết' id='description' name='description'>".$sanphaminfo[0]['gioithieu']."</textarea>
                     <label for='description'>Giới thiệu</label>

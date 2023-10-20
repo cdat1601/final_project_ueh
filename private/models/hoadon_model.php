@@ -35,6 +35,7 @@ class HoaDonModel{
                 $giasp = isset($value['giagiam']) ? $value['giagiam'] : $value['gia'];
                 $thanhtien = $giasp * $value["soluong"];
                 chayTruyVanKhongTraVeDL($link, "INSERT INTO `tbl_chitiethoadon` VALUES ('$idhoadon', '".$value["id_sanpham"]."', '".$value["size"]."' ,'".$value["soluong"]."', '$thanhtien');");
+                chayTruyVanTraVeDL($link, "UPDATE tbl_size SET tonkho = tonkho -1 WHERE id_sanpham = ".$value["id_sanpham"]." and size = '".$value["size"]."'");
             }
             return true;
         }                                                                    
@@ -55,11 +56,16 @@ class HoaDonModel{
 		}
 		return $hoadon;                                    
     }
-    public function LoadHoaDonCuaTaiKhoan($idtaikhoan){
+    public function LoadHoaDonCuaTaiKhoan($idtaikhoan,$ngaylap){
         $link = "";
         taoKetNoi($link);
         $hoadon = array();
-        $result = chayTruyVanTraVeDL($link,"SELECT * FROM `tbl_hoadon` WHERE `id_khachhang` = $idtaikhoan");
+        if($ngaylap == null){
+            $query = "SELECT * FROM `tbl_hoadon` WHERE `id_khachhang` = $idtaikhoan ";
+        }else 
+            $query = "SELECT * FROM `tbl_hoadon` WHERE `id_khachhang` = $idtaikhoan and `ngaylap` = '$ngaylap' ";
+     
+        $result = chayTruyVanTraVeDL($link,$query);
         while ($row = mysqli_fetch_assoc($result)) {
 			array_push($hoadon, $row);
 		}
@@ -104,11 +110,15 @@ class HoaDonModel{
         $result = chayTruyVanKhongTraVeDL($link, "UPDATE tbl_hoadon AS hd SET hd.trangthai = '$status' WHERE hd.id_hoadon = '$idhoadon'");
         return $result;
    }
-   public function LoadHoaDonTheoTrangThai($trangthai){
+   public function LoadHoaDonTheoTrangThai($trangthai,$ngaylap){
     $link = "";
     taoKetNoi($link);
-
-    $result = chayTruyVanTraVeDL($link, "SELECT * FROM `tbl_hoadon` as hd WHERE hd.`trangthai` = '$trangthai' ORDER BY hd.`id_hoadon` ASC");
+    
+    if($ngaylap == null){
+        $query = "SELECT * FROM `tbl_hoadon` as hd WHERE hd.`trangthai` = '$trangthai' ORDER BY hd.`id_hoadon` ASC";
+    }else
+    $query = "SELECT * FROM `tbl_hoadon` as hd WHERE hd.`trangthai` = '$trangthai' and hd.ngaylap = '$ngaylap' ORDER BY hd.`id_hoadon` ASC";
+    $result = chayTruyVanTraVeDL($link,$query);
     $hoadons = array();
     while ($row = mysqli_fetch_assoc($result)) {
         array_push($hoadons, $row);
@@ -125,6 +135,18 @@ class HoaDonModel{
         array_push($hoadons, $row);
     }
     return ($hoadons);
-   }
+    }
+    public function ThongKe(){
+        $link = "";
+        taoKetNoi($link); 
+        $sanpham = array();
+        $result = chayTruyVanTraVeDL($link,"SELECT id_sanpham,SUM(soluong) as tongso
+                                                FROM tbl_chitiethoadon
+                                                GROUP BY id_sanpham;");
+    while ($row = mysqli_fetch_assoc($result)) {
+        array_push($sanpham, $row);
+    }
+    return ($sanpham);
+    }
 }
 ?>

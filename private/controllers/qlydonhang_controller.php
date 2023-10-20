@@ -1,4 +1,5 @@
 <?php
+require_once("private/models/sanpham_model.php");
 require_once("private/models/taikhoan_model.php");
 require_once("private/models/hoadon_model.php");
 require_once("private/modules/config.php");
@@ -33,7 +34,8 @@ class QuanLyDonHangController{
                 if($action == 'timkiem'){
                     if(isset($_GET['status'])){
                         $trangthai = $_GET['status'];
-                        $this->LoadDonHangTheoTrangThai($trangthai);
+                        $date = $_GET['ngaylap'];
+                        $this->LoadDonHangTheoTrangThai($trangthai,$date);
                         exit();
                     }else {
                         $sdt= $_GET['phonenumber'];
@@ -88,7 +90,7 @@ class QuanLyDonHangController{
         </div>
         <div class='row ad-header'>
             <h3  class='col-md-12 col-lg-5' id='ad-tit'>Quản lý đơn hàng</h3>
-            <a href='?to=donhang&amp;action=thongke' class='ad-addbtn button'> Thống kê doanh số</a>
+            <a href='?to=donhang&amp;action=thongke' class='ad-addbtn button'> Thống kê hàng đã bán</a>
         </div>
         <div class='filter mb-3'>
             <form method='get'>
@@ -107,6 +109,10 @@ class QuanLyDonHangController{
                     </select>
                     <label for='floatingSelect'>Trạng thái</label>
            
+                </div>
+                <div class='form-floating ms-1'>
+                <input class='form-control' type='date' name='ngaylap' id='ngaylap' placeholder='dd-mm-yyyy'>
+                    <label style='left:9px;' for='ngaylap'>Ngày lập</label>
                 </div>
             <button type='submit' class='filterbtn button'>Lọc</button>
             </form>
@@ -247,9 +253,9 @@ class QuanLyDonHangController{
         $hoaDonModel = new HoaDonModel;
         $hoaDonModel->CapNhatTrangThai($idhoadon,$status);
     }
-    private function LoadDonHangTheoTrangThai($trangthai){
+    private function LoadDonHangTheoTrangThai($trangthai,$date){
         $hoaDonModel = new HoaDonModel;
-        $hoadon = $hoaDonModel->LoadHoaDonTheoTrangThai($trangthai);
+        $hoadon = $hoaDonModel->LoadHoaDonTheoTrangThai($trangthai,$date);
         
         echo
         "
@@ -272,7 +278,7 @@ class QuanLyDonHangController{
         </div>
         <div class='row ad-header'>
             <h3  class='col-md-12 col-lg-5' id='ad-tit'>Quản lý sản phẩm</h3>
-            <a href='?to=donhang&amp;action=thongke' class='ad-addbtn button'> Thống kê doanh số</a>
+            <a href='?to=donhang&amp;action=thongke' class='ad-addbtn button'> Thống kê hàng đã bán</a>
         </div>
         <div class='filter mb-3'>
         <form method='get'>
@@ -292,6 +298,10 @@ class QuanLyDonHangController{
             <label for='floatingSelect'>Trạng thái</label>
    
         </div>
+        <div class='form-floating ms-1'>
+                <input class='form-control' type='date' name='ngaylap' id='ngaylap' value='".$date."' placeholder='dd-mm-yyyy'>
+                    <label style='left:9px;' for='ngaylap'>Ngày lập</label>
+                </div>
     <button type='submit' class='filterbtn button'>Lọc</button>
     </form>
         </div>
@@ -356,7 +366,7 @@ class QuanLyDonHangController{
         </div>
         <div class='row ad-header'>
             <h3  class='col-md-12 col-lg-5' id='ad-tit'>Quản lý sản phẩm</h3>
-            <a href='?to=donhang&amp;action=thongke' class='ad-addbtn button'> Thống kê doanh số</a>
+            <a href='?to=donhang&amp;action=thongke' class='ad-addbtn button'> Thống kê hàng đã bán</a>
         </div>
         <div class='filter mb-3'>
         <form method='get'>
@@ -376,6 +386,10 @@ class QuanLyDonHangController{
             <label for='floatingSelect'>Trạng thái</label>
    
         </div>
+        <div class='form-floating ms-1'>
+                <input class='form-control' type='date' name='ngaylap' id='ngaylap' placeholder='dd-mm-yyyy'>
+                    <label style='left:9px;' for='ngaylap'>Ngày lập</label>
+                </div>
     <button type='submit' class='filterbtn button'>Lọc</button>
     </form>
         </div>
@@ -418,26 +432,10 @@ class QuanLyDonHangController{
         }
     }
     private function ThongKe(){
+        $sanPhamModel = new SanPhamModel;
         $hoaDonModel = new HoaDonModel;
-        $hoadonsum = $hoaDonModel->LoadAll();
-
-        $tt = array ('Chờ xác nhận','Đã xác nhận','Đã đóng gói','Đang giao hàng','Đã hoàn thành','Đã hủy');
-        $donhang = array();
-        for($i = 0; $i<count($tt); $i++){
-            $donhang[$i] = count($hoaDonModel->LoadHoaDonTheoTrangThai($tt[$i]));
-        }
+        $sanpham = $hoaDonModel->ThongKe();
         
-
-        $tongdaban = 0 ;
-        $tongdangcho = 0;
-        for($i = 0; $i < count($hoadonsum); $i++){
-            if($hoadonsum[$i]['trangthai'] == 'Đã hoàn thành' || $hoadonsum[$i]['hinhthucthanhtoan'] == 'Chuyển khoản'){
-                $tongdaban = $tongdaban + $hoadonsum[$i]['tongtien'] -$hoadonsum[$i]['phivanchuyen'];
-            }else {
-                $tongdangcho = $tongdangcho + $hoadonsum[$i]['tongtien'] -$hoadonsum[$i]['phivanchuyen'];
-            }
-        }
-        $tongthunhap = $tongdaban + $tongdangcho;
         echo
         "
         <div class='container-fluid'>
@@ -447,35 +445,37 @@ class QuanLyDonHangController{
         <div class='col-lg-8 col-sm-12 mt-5'>
         <div class='row'>
         <div class='ad-header'>
-            <h3  class='col-md-12 col-lg-5' id='ad-tit'>Thống kê doanh số</h3>
+            <h3  class='col-md-12 col-lg-5' id='ad-tit'>Thống kê lượng hàng bán được</h3>
             <a style='text-decoration: underline;' href='?to=donhang'>🡐 Quay lại</a>
         </div>
-        <div class='col-6 col-lg-6 statistics-tit'>
-                <p>Tổng thu nhập dự tính: </p>
-                <p>Tổng giá trị đơn hàng đã bán: </p>
-                <p>Tổng giá trị đơn hàng đang chờ: </p>
-                <br>
-                <p>Đơn hàng chờ xác nhận: </p>
-                <p>Đơn hàng đã xác nhận: </p>
-                <p>Đơn hàng đã đóng gói: </p>
-                <p>Đơn hàng đang giao hàng: </p>
-                <p>Đơn hàng đang đã hoàn thành: </p>
-                <p>Đơn hàng đang đã hủy: </p>
-            </div>
-            <div class='col-6 col-lg-6 statistics'>
-            <p ><strong>".number_format($tongthunhap,0,',',',') ."₫</strong></p>
-            <p style='color:#008800'><strong>".number_format($tongdaban,0,',',',') ."₫</strong></p>
-            <p style='color:#CC0000'><strong>".number_format($tongdangcho,0,',',',') ."₫</strong></p>
-            <br>
-            <p style='color:#CC0000'><strong>".$donhang[0]."</strong></p>
-            <p style='color:#000'><strong>".$donhang[1]."</strong></p>
-            <p style='color:#000'><strong>".$donhang[2]."</strong></p>
-            <p style='color:#000'><strong>".$donhang[3]."</strong></p>
-            <p style='color:#008800'><strong>".$donhang[4]."</strong></p>
-            <p style='color:#CC0000'><strong>".$donhang[5]."</strong></p>
-            </div>
-            </div>";
-            
+        
+        ";
+        echo "<div class='row static'>";
+        
+        for($i = 0 ; $i < count($sanpham); $i++){
+            $sanphaminfo = $sanPhamModel->LoadSanPhamInFo($sanpham[$i]['id_sanpham']);
+            echo"<div class='row ad-product p-0' id='qlysp'>
+
+                <div class='col-md-3 col-lg-1 col-xl-1 col-2 g-0'>
+                    
+                        <img class='img-fluid' src='". $sanphaminfo[0]["anhchinh"] . "'>
+                </div>
+        
+                <div class='col-md-6 col-lg-7 col-xl-7 col-7 ad-proinfo static-name'>
+                    <h4>".$sanphaminfo[0]["ten"]."</h4>
+                </div>
+                <div class='col-2 ad-action '>
+                  <p>".$sanpham[$i]['tongso']."</p>
+                </div>
+                </div>";
+        }
+        
+
+    
+        
+        
+        echo"</div>";
+        
     }
 }
 ?>

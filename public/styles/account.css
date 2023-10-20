@@ -150,3 +150,12 @@ display: block;
   	padding: 10px 30px;
     
 }
+.filter form{
+    display: flex;
+    align-items: center;
+}
+.filterbtn{
+    width: 10%;
+    height: 30px;
+    margin-left: 15px;
+}

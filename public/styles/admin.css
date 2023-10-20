@@ -194,11 +194,19 @@
     height: 10%;
     float: right;
 }
-.statistics-tit{
-    text-align: right;
+
+.static{
+    width: 60%;
+    margin: auto;
 }
-.statistics{
-    text-align: left;
+@media only screen and (max-width: 992px){
+    .static{
+        width: 100%;
+        margin: auto;
+    }  
+}
+.static-name h4{
+    width: 100% !important;
 }
 .note-form{
     font-size: 12px;
@@ -212,4 +220,8 @@
     width: 10%;
     height: 30px;
     margin-left: 15px;
+}
+.stock{
+    width: 40px;
+    margin-right: 5px;
 }
