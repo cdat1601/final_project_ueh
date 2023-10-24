@@ -35,7 +35,7 @@ class HoaDonModel{
                 $giasp = isset($value['giagiam']) ? $value['giagiam'] : $value['gia'];
                 $thanhtien = $giasp * $value["soluong"];
                 chayTruyVanKhongTraVeDL($link, "INSERT INTO `tbl_chitiethoadon` VALUES ('$idhoadon', '".$value["id_sanpham"]."', '".$value["size"]."' ,'".$value["soluong"]."', '$thanhtien');");
-                chayTruyVanTraVeDL($link, "UPDATE tbl_size SET tonkho = tonkho -1 WHERE id_sanpham = ".$value["id_sanpham"]." and size = '".$value["size"]."'");
+                chayTruyVanTraVeDL($link, "UPDATE tbl_size SET tonkho = tonkho - ".$value["soluong"]." WHERE id_sanpham = ".$value["id_sanpham"]." and size = '".$value["size"]."'");
             }
             return true;
         }                                                                    
